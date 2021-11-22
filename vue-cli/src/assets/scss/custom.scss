@@ -1,11 +1,114 @@
 // variables
 $color: "#3f3351";
 
+// Fonts
+@font-face {
+  font-family: "Poppins";
+  src: url("../fonts/Poppins-Regular.ttf");
+}
+
+body {
+  font-family: "Poppins", sans-serif !important;
+}
+
+// Utility
+.text-center {
+  text-align: center !important;
+}
+
 // Theme dark
 .theme--dark.v-application {
   background-color: #3f3351 !important;
+  color: #3f3351 !important;
 
   button {
     color: #3f3351 !important;
   }
+
+  h1 {
+    color: #3f3351 !important;
+  }
+
+  .theme--dark.v-text-field--solo > .v-input__control > .v-input__slot {
+    background-color: #fff;
+  }
+
+  .theme--dark.v-input input,
+  input::placeholder {
+    color: #3f3351 !important;
+  }
+
+  .v-dialog {
+    button {
+      color: #ffff !important;
+    }
+  }
 }
+
+.theme--light.v-application {
+  background-color: #fff !important;
+  color: #fff !important;
+
+  button {
+    color: #fff !important;
+  }
+
+  h1 {
+    color: #fff !important;
+  }
+
+  .theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+    background-color: #3f3351;
+  }
+
+  .theme--light.v-input input,
+  input::placeholder {
+    color: #fff !important;
+  }
+
+  .v-dialog {
+    button {
+      color: #3f3351 !important;
+    }
+  }
+}
+
+// Card
+.v-card {
+  border-radius: 30px !important;
+}
+
+.v-dialog {
+  border-radius: 30px !important;
+}
+
+// Page Head
+.page_head__card {
+  padding: 80px 150px;
+}
+
+// Search Form
+.search_form {
+  z-index: 1;
+
+  .v-text-field {
+    max-width: 100px !important;
+  }
+}
+
+// Background Wave
+.background-wave {
+  height: 400px;
+  background-image: url("~@/assets/img/wave.png");
+}
+
+// Page Main
+.page-main {
+  position: relative;
+  top: -350px;
+
+  .v-card {
+    color: #3f3351 !important;
+  }
+}
+
