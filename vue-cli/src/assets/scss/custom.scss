@@ -99,7 +99,8 @@ body {
 // Background Wave
 .background-wave {
   height: 400px;
-  background-image: url("~@/assets/img/wave.png");
+  transform: scale(10px);
+  background: url("~@/assets/img/wave.svg") center center / cover;
 }
 
 // Page Main
@@ -111,4 +112,3 @@ body {
     color: #3f3351 !important;
   }
 }
-

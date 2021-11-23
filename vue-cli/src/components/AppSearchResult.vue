@@ -1,8 +1,10 @@
 <template>
   <ul class="list-disc list-inside">
     <app-search-result-item
-      v-for="index in 10"
-      :key="index"
+      v-for="(result, i) in $store.state.resultList"
+      :key="i"
+      :result-text="result.text"
+      :result-start="result.start"
     ></app-search-result-item>
   </ul>
 </template>
