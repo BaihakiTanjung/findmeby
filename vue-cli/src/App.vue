@@ -19,11 +19,12 @@
                 placeholder="url youtube ?"
               ></app-text-field>
             </div>
-            <app-button @click="resetData">clear</app-button>
+            <app-button @click="clear">clear</app-button>
             <div class="search-form__input">
               <app-text-field
                 v-model="keyword"
                 placeholder="search you want ?"
+                hint="At least 3 characters"
               ></app-text-field>
             </div>
           </div>
@@ -41,7 +42,7 @@
         <ThePageMain>
           <router-view></router-view>
 
-          <div class="d-flex justify-center my-10">
+          <div class="d-flex justify-center my-5">
             <app-button @click="navigate('first')">First</app-button>
             <app-button @click="navigate('prev')">Prev</app-button>
             <app-button @click="navigate('next')">Next</app-button>
@@ -65,7 +66,7 @@ import { pDebounce } from "./utils";
 export default {
   name: "App",
   data: () => ({
-    url: "https://www.youtube.com/watch?v=klnvttPfOUM&t=10391s",
+    url: "",
     keyword: "",
     isLoading: false,
   }),
@@ -79,7 +80,8 @@ export default {
   methods: {
     async search(keyword, url, pagination) {
       try {
-        this.isLoading = true;
+        this.resetData();
+        this.$store.commit("SET_LOADING", true);
         const response = await fetch(
           pagination
             ? pagination
@@ -88,26 +90,35 @@ export default {
               )}`
         ).then((_) => (_.ok ? _.json() : []));
 
-        this.$store.commit("SET_RESULT_LIST", { resultList: response.data });
-        this.$store.commit("SET_PAGINATION", {
-          first: response.first,
-          last: response.last,
-          prev: response.prev,
-          next: response.next,
-          total: response.total,
-          page: response.page,
-        });
-        await this.$router
-          .push({
-            name: "SearchResultPage",
-            params: { page: response.page },
-          })
-          .catch(() => {});
+        console.log(response);
+        if (response.data !== null) {
+          this.$store.commit("SET_RESULT_LIST", { resultList: response.data });
+          this.$store.commit("SET_PAGINATION", {
+            first: response.first,
+            last: response.last,
+            prev: response.prev,
+            next: response.next,
+            total: response.total,
+            page: response.page,
+          });
+
+          this.$store.commit("SET_META", { meta: response.meta });
+          this.$store.commit("SET_ERROR", { error: "" });
+
+          await this.$router
+            .push({
+              name: "SearchResultPage",
+              params: { page: response.page },
+            })
+            .catch(() => {});
+        } else {
+          this.$store.commit("SET_ERROR", { error: response.message });
+        }
       } catch (error) {
         console.error(error);
       } finally {
         setTimeout(() => {
-          this.isLoading = false;
+          this.$store.commit("SET_LOADING", false);
         }, 1000);
       }
     },
@@ -128,6 +139,7 @@ export default {
     },
     resetData() {
       this.$store.commit("SET_RESULT_LIST", { resultList: [] });
+      this.$store.commit("SET_META", { meta: {} });
       this.$store.commit("RESET_PAGINATION");
     },
   },

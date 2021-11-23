@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    url: "https://www.youtube.com/watch?v=klnvttPfOUM&t=10391s",
+    url: "",
     resultList: [],
     pagination: {
       first: undefined,
@@ -16,16 +16,22 @@ export default new Vuex.Store({
       page: 0,
     },
     currentResultStart: undefined,
+    loading: false,
+    meta: "",
+    error: "",
   },
   mutations: {
-    SET_URL(state, { url }) {
-      state.url = url;
+    SET_URL(state, { val }) {
+      state.url = val;
     },
     SET_RESULT_LIST(state, { resultList }) {
       state.resultList = resultList;
     },
     SET_PAGINATION(state, pagination) {
       state.pagination = pagination;
+    },
+    SET_META(state, meta) {
+      state.meta = meta.meta;
     },
     RESET_PAGINATION(state) {
       state.pagination = {
@@ -39,6 +45,12 @@ export default new Vuex.Store({
     },
     SET_CURRENT_RESULT_START(state, { currentResultStart }) {
       state.currentResultStart = currentResultStart;
+    },
+    SET_LOADING(state, loading) {
+      state.loading = loading;
+    },
+    SET_ERROR(state, error) {
+      state.error = error.error;
     },
   },
 });

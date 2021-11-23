@@ -4,6 +4,8 @@
     v-model="show"
     transition="dialog-bottom-transition"
     max-width="600"
+    eager
+    persistent
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -20,17 +22,17 @@
     <template>
       <v-card>
         <v-toolbar class="text-center" color="primary" dark
-          >Video {{ $store.state.currentResultStart }}
-        </v-toolbar>
+          >Video Youtube</v-toolbar
+        >
 
         <div v-if="$store.state.currentResultStart" class="dialog-video pa-3">
           <iframe
-            width="560"
-            height="315"
+            height="300"
+            width="400"
             :src="embedUrl"
             title="YouTube video player"
             frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
         </div>
@@ -44,7 +46,7 @@
 </template>
 <script>
 export default {
-  props: ["visible", "resultStart"],
+  props: ["visible", "resultStart", "resultText"],
   data() {
     return {
       show: false,

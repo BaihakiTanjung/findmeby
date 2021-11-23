@@ -4,7 +4,10 @@
       <h4 class="text-h5" v-html="resultText"></h4>
 
       <!-- Dialog -->
-      <app-dialog :resultStart="resultStart"></app-dialog>
+      <app-dialog
+        :resultStart="resultStart"
+        :resultText="resultText"
+      ></app-dialog>
       <!-- End Dialog -->
     </div>
   </v-card>

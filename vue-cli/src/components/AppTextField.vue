@@ -6,6 +6,7 @@
     rounded
     :value="value"
     @input="onInput"
+    :hint="hint"
   ></v-text-field>
 </template>
 <script>
@@ -16,6 +17,10 @@ export default {
       default: "",
     },
     placeholder: {
+      type: String,
+      default: "",
+    },
+    hint: {
       type: String,
       default: "",
     },

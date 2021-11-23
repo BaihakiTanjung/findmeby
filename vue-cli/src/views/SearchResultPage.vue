@@ -9,5 +9,10 @@ export default {
   components: {
     AppSearchResult,
   },
+  async created() {
+    if (this.$store.state.resultList.length === 0) {
+      await this.$router.replace("/");
+    }
+  }
 };
 </script>

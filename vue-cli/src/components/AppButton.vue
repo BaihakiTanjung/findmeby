@@ -1,5 +1,11 @@
 <template>
-  <v-btn @click="onClick" class="mx-5" color="primary" elevation="2" rounded
+  <v-btn
+    @click="onClick"
+    :disabled="disabled"
+    class="mx-5"
+    color="primary"
+    elevation="2"
+    rounded
     ><slot></slot
   ></v-btn>
 </template>
@@ -9,6 +15,10 @@ export default {
     text: {
       type: String,
       default: "",
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
