@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/scss/custom.css" />
+  </head>
+  <body>
+    <div id="app">
+      <v-app>
+        <!-- Toggle Theme -->
+        <app-button-theme></app-button-theme>
+        <!-- End Toggle Theme -->
+
+        <v-container class="my-15">
+          <!-- Page Head -->
+          <the-page-head></the-page-head>
+          <!-- End Page Head -->
+
+          <div class="mt-n6">
+            <!-- Search Form -->
+            <div class="search-form d-flex justify-center">
+              <div class="d-flex p-5">
+                <div class="search-form__input">
+                  <app-text-field
+                    v-model="url"
+                    placeholder="url youtube ?"
+                  ></app-text-field>
+                </div>
+                <app-button @click="clear">clear</app-button>
+                <div class="search-form__input">
+                  <app-text-field
+                    v-model="keyword"
+                    placeholder="search you want ?"
+                    hint="At least 3 characters"
+                  ></app-text-field>
+                </div>
+              </div>
+            </div>
+            <!-- End Search Form -->
+          </div>
+        </v-container>
+
+        <!-- Background Wave -->
+        <div class="background-wave"></div>
+        <!-- End Background Wave -->
+
+        <v-container>
+          <v-main>
+            <the-page-main>
+              <router-view></router-view>
+
+              <div class="d-flex justify-center my-5">
+                <app-button @click="navigate('first')">First</app-button>
+                <app-button @click="navigate('prev')">Prev</app-button>
+                <app-button @click="navigate('next')">Next</app-button>
+                <app-button @click="navigate('last')">Last</app-button>
+              </div>
+            </the-page-main>
+          </v-main>
+        </v-container>
+      </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex@3"></script>
+    <script src="./utils/index.js"></script>
+
+    <script type="text/x-template" id="app-button-theme">
+      <div class="theme-toggle">
+        <div class="bounce">
+          <v-btn
+            @click="toggleTheme"
+            class="theme-toggle__btn mx-2 bounce"
+            fab
+            color="primary"
+          >
+            <v-icon dark> mdi-theme-light-dark </v-icon>
+          </v-btn>
+        </div>
+      </div>
+    </script>
+
+    <script>
+      window.AppButtonTheme = {
+        template: "#app-button-theme",
+        methods: {
+          toggleTheme() {
+            this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+          },
+        },
+      };
+    </script>
+
+    <script type="text/x-template" id="the-page-head">
+      <div class="page-head">
+        <v-card class="page_head__card text-center" color="primary">
+          <h4 class="text-h4 font-weight-bold">FIND EVERYTHINGS YOU WANT ?</h4>
+        </v-card>
+      </div>
+    </script>
+
+    <script>
+      window.ThePageHead = {
+        template: "#the-page-head",
+      };
+    </script>
+
+    <script type="text/x-template" id="app-text-field">
+        <v-text-field
+        :placeholder="placeholder"
+        solo
+        flat
+        rounded
+        :value="value"
+        @input="onInput"
+        :hint="hint"
+      ></v-text-field>
+    </script>
+
+    <script>
+      window.AppTextField = {
+        template: "#app-text-field",
+        props: {
+          value: {
+            type: String,
+            default: "",
+          },
+          placeholder: {
+            type: String,
+            default: "",
+          },
+          hint: {
+            type: String,
+            default: "",
+          },
+        },
+        methods: {
+          onInput(e) {
+            this.$emit("input", e);
+          },
+        },
+      };
+    </script>
+
+    <script type="text/x-template" id="app-button">
+        <v-btn
+        @click="onClick"
+        :disabled="disabled"
+        class="mx-5"
+        color="primary"
+        elevation="2"
+        rounded
+        ><slot></slot
+      ></v-btn>
+    </script>
+
+    <script>
+      window.AppButton = {
+        template: "#app-button",
+        props: {
+          text: {
+            type: String,
+            default: "",
+          },
+          disabled: {
+            type: Boolean,
+            default: false,
+          },
+        },
+        methods: {
+          onClick() {
+            this.$emit("click");
+          },
+        },
+      };
+    </script>
+
+    <script type="text/x-template" id="the-page-main">
+      <div class="page-main">
+        <v-card class="page_main__card pa-10" color="white">
+          <template v-if="!$store.state.loading">
+            <div v-if="$store.state.error" class="d-flex justify-center py-5">
+              {{ $store.state.error }} / video tidak bisa diakses
+            </div>
+            <div class="mx-auto text-center">
+              <img :src="$store.state.meta.channelLogoUrl" alt="" srcset="" />
+              <h2 class="font-weight-bold mt-3">
+                {{ $store.state.meta.channelName }}
+              </h2>
+            </div>
+
+            <div class="d-flex justify-center py-5">
+              <h3 class="font-weight-bold mr-10">
+                Result : <span>{{ totalResult }}</span>
+              </h3>
+              <h3 class="font-weight-bold">
+                Page : <span>{{ currentPage }}</span>
+              </h3>
+            </div>
+            <v-divider></v-divider>
+          </template>
+          <v-skeleton-loader
+            v-else-if="$store.state.loading"
+            class="mx-auto"
+            max-width="100px"
+            max-height="100px"
+            v-bind="attrs"
+            light
+            type="image"
+          ></v-skeleton-loader>
+          <div>
+            <slot></slot>
+          </div>
+        </v-card>
+      </div>
+    </script>
+
+    <script>
+      window.ThePageMain = {
+        template: "#the-page-main",
+        computed: {
+          totalResult() {
+            return this.$store.state.resultList.length;
+          },
+          currentPage() {
+            return this.$store.state.pagination.page;
+          },
+        },
+      };
+    </script>
+
+    <script type="text/x-template" id="app-dialog">
+        <v-dialog
+        class="dialog"
+        v-model="show"
+        transition="dialog-bottom-transition"
+        max-width="600"
+        eager
+        persistent
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="mx-5"
+            color="primary"
+            elevation="2"
+            rounded
+            @click="onPlay"
+            v-bind="attrs"
+            v-on="on"
+            >Play Video</v-btn
+          >
+        </template>
+        <template>
+          <v-card>
+            <v-toolbar class="text-center" color="primary" dark
+              >Video Youtube</v-toolbar
+            >
+
+            <div v-if="$store.state.currentResultStart" class="dialog-video pa-3">
+              <iframe
+                height="300"
+                width="400"
+                :src="embedUrl"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+
+            <v-card-actions class="justify-end">
+              <v-btn text color="primary" @click.stop="closeDialog()">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
+    </script>
+
+    <script>
+      window.AppDialog = {
+        template: "#app-dialog",
+        props: ["visible", "resultStart", "resultText"],
+        data() {
+          return {
+            show: false,
+          };
+        },
+        computed: {
+          youtubeId() {
+            // RegEx taken from: https://stackoverflow.com/a/6904504
+            return /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/gi.exec(
+              this.$store.state.url || ""
+            );
+          },
+          embedUrl() {
+            return `https://www.youtube.com/embed/${this.youtubeId[1]}?autoplay=1&start=${this.$store.state.currentResultStart}`;
+          },
+        },
+        methods: {
+          closeDialog() {
+            this.show = false;
+            this.$store.commit("SET_CURRENT_RESULT_START", {
+              currentResultStart: undefined,
+            });
+          },
+          onPlay() {
+            this.$store.commit("SET_CURRENT_RESULT_START", {
+              currentResultStart: this.resultStart,
+            });
+          },
+        },
+      };
+    </script>
+
+    <script type="text/x-template" id="app-search-result-item">
+      <v-card class="mx-auto ma-3" color="#fff" dark>
+        <div class="d-flex justify-space-between pa-5">
+          <h4 class="text-h5" v-html="resultText"></h4>
+
+          <!-- Dialog -->
+          <app-dialog
+            :resultStart="resultStart"
+            :resultText="resultText"
+          ></app-dialog>
+          <!-- End Dialog -->
+        </div>
+      </v-card>
+    </script>
+
+    <script>
+      window.AppSearchResultItem = {
+        template: "#app-search-result-item",
+        components: {
+          AppDialog: window.AppDialog,
+        },
+        props: {
+          resultStart: {
+            type: Number,
+            default: 0,
+          },
+          resultText: {
+            type: String,
+            default: "",
+          },
+        },
+        data() {
+          return {
+            dialog: false,
+          };
+        },
+        methods: {},
+      };
+    </script>
+
+    <script type="text/x-template" id="app-search-result">
+        <div>
+       <div v-if="!$store.state.loading">
+         <ul
+           v-if="$store.state.resultList.length > 0"
+           class="list-disc list-inside"
+         >
+           <app-search-result-item
+             v-for="(result, i) in $store.state.resultList"
+             :key="i"
+             :result-text="result.text"
+             :result-start="result.start"
+           ></app-search-result-item>
+         </ul>
+
+         <div v-else>
+           <div class="d-flex justify-center py-5">
+             <h6 class="text-h6">keyword not found</h6>
+           </div>
+         </div>
+       </div>
+       <v-skeleton-loader
+         v-else-if="$store.state.loading"
+         v-for="index in 5"
+         :key="index"
+         light
+         type="list-item-three-line"
+         max-width="true"
+       ></v-skeleton-loader>
+      </div>
+    </script>
+
+    <script>
+      window.AppSearchResult = {
+        template: "#app-search-result",
+        components: {
+          AppSearchResultItem: window.AppSearchResultItem,
+        },
+      };
+    </script>
+
+    <script type="text/x-template" id="search-result-page">
+      <div>
+        <app-search-result></app-search-result>
+      </div>
+    </script>
+
+    <script>
+      window.SearchResultPage = {
+        template: "#search-result-page",
+        components: {
+          AppSearchResult: window.AppSearchResult,
+        },
+        async created() {
+          if (this.$store.state.resultList.length === 0) {
+            await this.$router.replace("/");
+          }
+        },
+      };
+    </script>
+
+    <script>
+      window.store = new Vuex.Store({
+        state: {
+          url: "",
+          resultList: [],
+          pagination: {
+            first: undefined,
+            last: undefined,
+            prev: undefined,
+            next: undefined,
+            total: 0,
+            page: 0,
+          },
+          currentResultStart: undefined,
+          loading: false,
+          meta: "",
+          error: "",
+        },
+        mutations: {
+          SET_URL(state, { val }) {
+            state.url = val;
+          },
+          SET_RESULT_LIST(state, { resultList }) {
+            state.resultList = resultList;
+          },
+          SET_PAGINATION(state, pagination) {
+            state.pagination = pagination;
+          },
+          SET_META(state, meta) {
+            state.meta = meta.meta;
+          },
+          RESET_PAGINATION(state) {
+            state.pagination = {
+              first: undefined,
+              last: undefined,
+              prev: undefined,
+              next: undefined,
+              total: 0,
+              page: 0,
+            };
+          },
+          SET_CURRENT_RESULT_START(state, { currentResultStart }) {
+            state.currentResultStart = currentResultStart;
+          },
+          SET_LOADING(state, loading) {
+            state.loading = loading;
+          },
+          SET_ERROR(state, error) {
+            state.error = error.error;
+          },
+        },
+      });
+    </script>
+
+    <script>
+      const routes = [
+        {
+          name: "SearchResultPage",
+          path: "/result/:page",
+          component: window.SearchResultPage,
+        },
+      ];
+      window.router = new VueRouter({
+        mode: "history",
+        routes,
+      });
+    </script>
+
+    <script>
+      const vuetify = new Vuetify({
+        theme: {
+          dark: true,
+          themes: {
+            light: {
+              primary: "#E9A6A6",
+              secondary: "#3F3351",
+            },
+            dark: {
+              primary: "#E9A6A6",
+              secondary: "#3F3351",
+            },
+          },
+        },
+      });
+
+      new Vue({
+        el: "#app",
+        vuetify: vuetify,
+        store: window.store,
+        router: window.router,
+        components: {
+          AppButtonTheme: window.AppButtonTheme,
+          ThePageHead: window.ThePageHead,
+          ThePageMain: window.ThePageMain,
+          AppTextField: window.AppTextField,
+          AppButton: window.AppButton,
+        },
+        data: () => ({
+          url: "",
+          keyword: "",
+          isLoading: false,
+        }),
+        methods: {
+          async search(keyword, url, pagination) {
+            try {
+              this.resetData();
+              this.$store.commit("SET_LOADING", true);
+              const response = await fetch(
+                pagination
+                  ? pagination
+                  : `https://cari-teks-video-api.vercel.app/api/search?&q=${keyword}&url=${encodeURIComponent(
+                      url
+                    )}`
+              ).then((_) => (_.ok ? _.json() : []));
+
+              console.log(response);
+              if (response.data !== null) {
+                this.$store.commit("SET_RESULT_LIST", {
+                  resultList: response.data,
+                });
+                this.$store.commit("SET_PAGINATION", {
+                  first: response.first,
+                  last: response.last,
+                  prev: response.prev,
+                  next: response.next,
+                  total: response.total,
+                  page: response.page,
+                });
+
+                this.$store.commit("SET_META", { meta: response.meta });
+                this.$store.commit("SET_ERROR", { error: "" });
+
+                await this.$router
+                  .push({
+                    name: "SearchResultPage",
+                    params: { page: response.page },
+                  })
+                  .catch(() => {});
+              } else {
+                this.$store.commit("SET_ERROR", { error: response.message });
+              }
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setTimeout(() => {
+                this.$store.commit("SET_LOADING", false);
+              }, 1000);
+            }
+          },
+          async navigate(type) {
+            if (!this.$store.state.pagination[type]) {
+              return;
+            }
+            await this.search(
+              this.keyword,
+              this.url,
+              this.$store.state.pagination[type]
+            );
+          },
+          async clear() {
+            this.keyword = "";
+            this.resetData();
+            await this.$router.replace("/");
+          },
+          resetData() {
+            this.$store.commit("SET_RESULT_LIST", { resultList: [] });
+            this.$store.commit("SET_META", { meta: {} });
+            this.$store.commit("RESET_PAGINATION");
+          },
+        },
+        watch: {
+          keyword: pDebounce(async function keywordHandler(keyword) {
+            if (keyword && keyword.length >= 3) {
+              await this.search(keyword, this.url);
+            } else {
+              this.resetData();
+            }
+          }, 250),
+          url(val) {
+            this.$store.commit("SET_URL", { val });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

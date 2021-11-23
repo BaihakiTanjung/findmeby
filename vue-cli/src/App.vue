@@ -65,11 +65,6 @@ import { pDebounce } from "./utils";
 
 export default {
   name: "App",
-  data: () => ({
-    url: "",
-    keyword: "",
-    isLoading: false,
-  }),
   components: {
     AppButtonTheme,
     ThePageHead,
@@ -77,6 +72,12 @@ export default {
     AppTextField,
     AppButton,
   },
+  data: () => ({
+    url: "",
+    keyword: "",
+    isLoading: false,
+  }),
+
   methods: {
     async search(keyword, url, pagination) {
       try {
