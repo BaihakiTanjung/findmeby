@@ -4,9 +4,6 @@ import vuetify from "./plugins/vuetify";
 import "./assets/scss/main.scss";
 import store from "./store";
 import router from "./router";
-import PortalVue from 'portal-vue'
-
-Vue.use(PortalVue)
 
 Vue.config.productionTip = false;
 
