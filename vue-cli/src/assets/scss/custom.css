@@ -109,9 +109,9 @@ body {
   padding: 80px 150px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 425px) {
   .page_head__card {
-    padding: 80px 80px !important;
+    padding: 80px 40px !important;
   }
 }
 

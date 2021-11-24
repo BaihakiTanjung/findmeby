@@ -90,8 +90,8 @@ body {
 .page_head__card {
   padding: 80px 150px;
 
-  @media (max-width: 600px) {
-    padding: 80px 80px !important;
+  @media (max-width: 425px) {
+    padding: 80px 40px !important;
   }
 }
 
