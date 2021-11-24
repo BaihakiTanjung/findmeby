@@ -13,6 +13,6 @@ export default {
     if (this.$store.state.resultList.length === 0) {
       await this.$router.replace("/");
     }
-  }
+  },
 };
 </script>

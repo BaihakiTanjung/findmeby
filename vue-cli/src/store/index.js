@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    url: "",
+    url: "https://www.youtube.com/watch?v=klnvttPfOUM",
     resultList: [],
     pagination: {
       first: undefined,

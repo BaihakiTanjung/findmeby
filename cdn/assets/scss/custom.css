@@ -11,6 +11,10 @@ body {
   text-align: center !important;
 }
 
+.opacity-75 {
+  opacity: 0.75 !important;
+}
+
 .theme--dark.v-application {
   background-color: #3f3351 !important;
   color: #3f3351 !important;

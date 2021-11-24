@@ -16,6 +16,10 @@ body {
   text-align: center !important;
 }
 
+.opacity-75 {
+  opacity: 0.75 !important;
+}
+
 // Theme dark
 .theme--dark.v-application {
   background-color: #3f3351 !important;
@@ -113,7 +117,8 @@ body {
   }
 }
 
-// Button Theme
+// Theme Button
+
 .theme-toggle {
   position: fixed;
   right: 15px;

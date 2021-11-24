@@ -17,6 +17,7 @@
               <app-text-field
                 v-model="url"
                 placeholder="url youtube ?"
+                hint="Example : https://www.youtube.com/watch?v=klnvttPfOUM"
               ></app-text-field>
             </div>
             <app-button @click="clear">clear</app-button>
@@ -42,7 +43,10 @@
         <ThePageMain>
           <router-view></router-view>
 
-          <div class="d-flex justify-center my-5">
+          <div
+            v-if="$store.state.resultList.length > 9"
+            class="d-flex justify-center my-5"
+          >
             <app-button @click="navigate('first')">First</app-button>
             <app-button @click="navigate('prev')">Prev</app-button>
             <app-button @click="navigate('next')">Next</app-button>
@@ -73,7 +77,7 @@ export default {
     AppButton,
   },
   data: () => ({
-    url: "",
+    url: "https://www.youtube.com/watch?v=klnvttPfOUM",
     keyword: "",
     isLoading: false,
   }),

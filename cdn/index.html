@@ -35,6 +35,7 @@
                   <app-text-field
                     v-model="url"
                     placeholder="url youtube ?"
+                    hint="Example : https://www.youtube.com/watch?v=klnvttPfOUM"
                   ></app-text-field>
                 </div>
                 <app-button @click="clear">clear</app-button>
@@ -60,7 +61,10 @@
             <the-page-main>
               <router-view></router-view>
 
-              <div class="d-flex justify-center my-5">
+              <div
+                v-if="$store.state.resultList.length > 9"
+                class="d-flex justify-center my-5"
+              >
                 <app-button @click="navigate('first')">First</app-button>
                 <app-button @click="navigate('prev')">Prev</app-button>
                 <app-button @click="navigate('next')">Next</app-button>
@@ -79,6 +83,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vuex@3"></script>
     <script src="./utils/index.js"></script>
 
+    <!-- Button Theme -->
     <script type="text/x-template" id="app-button-theme">
       <div class="theme-toggle">
         <div class="bounce">
@@ -104,7 +109,9 @@
         },
       };
     </script>
+    <!-- End Button Theme -->
 
+    <!-- Page Head -->
     <script type="text/x-template" id="the-page-head">
       <div class="page-head">
         <v-card class="page_head__card text-center" color="primary">
@@ -118,7 +125,9 @@
         template: "#the-page-head",
       };
     </script>
+    <!-- End Page Head -->
 
+    <!-- Text Field -->
     <script type="text/x-template" id="app-text-field">
         <v-text-field
         :placeholder="placeholder"
@@ -155,7 +164,9 @@
         },
       };
     </script>
+    <!-- End Text Field -->
 
+    <!-- Button -->
     <script type="text/x-template" id="app-button">
         <v-btn
         @click="onClick"
@@ -188,22 +199,26 @@
         },
       };
     </script>
+    <!-- End Button -->
 
+    <!-- Page Main -->
     <script type="text/x-template" id="the-page-main">
       <div class="page-main">
         <v-card class="page_main__card pa-10" color="white">
           <template v-if="!$store.state.loading">
             <div v-if="$store.state.error" class="d-flex justify-center py-5">
-              {{ $store.state.error }} / video tidak bisa diakses
+              <p class="opacity-75">
+                {{ $store.state.error }} / video tidak bisa diakses
+              </p>
             </div>
-            <div class="mx-auto text-center">
+            <div v-if="$store.state.resultList.length > 0" class="mx-auto text-center">
               <img :src="$store.state.meta.channelLogoUrl" alt="" srcset="" />
               <h2 class="font-weight-bold mt-3">
                 {{ $store.state.meta.channelName }}
               </h2>
             </div>
 
-            <div class="d-flex justify-center py-5">
+            <div v-if="$store.state.resultList.length > 0" class="d-flex justify-center py-5">
               <h3 class="font-weight-bold mr-10">
                 Result : <span>{{ totalResult }}</span>
               </h3>
@@ -242,7 +257,9 @@
         },
       };
     </script>
+    <!-- End Page Main -->
 
+    <!-- Dialog -->
     <script type="text/x-template" id="app-dialog">
         <v-dialog
         class="dialog"
@@ -325,7 +342,9 @@
         },
       };
     </script>
+    <!-- End Dialog -->
 
+    <!-- Search Result Item -->
     <script type="text/x-template" id="app-search-result-item">
       <v-card class="mx-auto ma-3" color="#fff" dark>
         <div class="d-flex justify-space-between pa-5">
@@ -365,7 +384,9 @@
         methods: {},
       };
     </script>
+    <!-- End Search Result Item -->
 
+    <!-- Search Result -->
     <script type="text/x-template" id="app-search-result">
         <div>
        <div v-if="!$store.state.loading">
@@ -382,19 +403,35 @@
          </ul>
 
          <div v-else>
-           <div class="d-flex justify-center py-5">
-             <h6 class="text-h6">keyword not found</h6>
-           </div>
-         </div>
+          <div class="d-flex flex-column justify-center py-5 mx-auto">
+            <img
+              class="mx-auto"
+              src="https://png.pngtree.com/png-vector/20201224/ourmid/pngtree-vector-search-result-icon-material-png-image_2609789.jpg"
+              alt="keyword"
+              width="250"
+              height="250"
+            />
+            <h6 class="text-h6 text-center mt-5 opacity-75">keyword not found</h6>
+          </div>
+        </div>
        </div>
-       <v-skeleton-loader
-         v-else-if="$store.state.loading"
-         v-for="index in 5"
-         :key="index"
-         light
-         type="list-item-three-line"
-         max-width="true"
-       ></v-skeleton-loader>
+       <div v-else-if="$store.state.loading">
+        <v-skeleton-loader
+          light
+          type="list-item-two-line"
+          max-width="500"
+          max-height="100"
+          class="mx-auto"
+        ></v-skeleton-loader>
+
+        <v-skeleton-loader
+          v-for="index in 4"
+          :key="index"
+          light
+          type="list-item-three-line"
+          max-width="true"
+        ></v-skeleton-loader>
+      </div>
       </div>
     </script>
 
@@ -406,7 +443,9 @@
         },
       };
     </script>
+    <!-- End Search Result -->
 
+    <!-- Result Page -->
     <script type="text/x-template" id="search-result-page">
       <div>
         <app-search-result></app-search-result>
@@ -426,11 +465,13 @@
         },
       };
     </script>
+    <!-- End Result Page -->
 
+    <!-- Vuex -->
     <script>
       window.store = new Vuex.Store({
         state: {
-          url: "",
+          url: "https://www.youtube.com/watch?v=klnvttPfOUM",
           resultList: [],
           pagination: {
             first: undefined,
@@ -480,7 +521,9 @@
         },
       });
     </script>
+    <!-- End Vuex -->
 
+    <!-- Router -->
     <script>
       const routes = [
         {
@@ -494,8 +537,11 @@
         routes,
       });
     </script>
+    <!-- Router -->
 
+    <!-- Vue -->
     <script>
+      // Dark mode and Light mode theme
       const vuetify = new Vuetify({
         theme: {
           dark: true,
@@ -525,7 +571,7 @@
           AppButton: window.AppButton,
         },
         data: () => ({
-          url: "",
+          url: "https://www.youtube.com/watch?v=klnvttPfOUM",
           keyword: "",
           isLoading: false,
         }),
@@ -611,5 +657,6 @@
         },
       });
     </script>
+    <!-- End Vue -->
   </body>
 </html>

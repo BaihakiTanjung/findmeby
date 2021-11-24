@@ -3,16 +3,24 @@
     <v-card class="page_main__card pa-10" color="white">
       <template v-if="!$store.state.loading">
         <div v-if="$store.state.error" class="d-flex justify-center py-5">
-          {{ $store.state.error }} / video tidak bisa diakses
+          <p class="opacity-75">
+            {{ $store.state.error }} / video tidak bisa diakses
+          </p>
         </div>
-        <div class="mx-auto text-center">
-          <img :src="$store.state.meta.channelLogoUrl" alt="" srcset="" />
+        <div
+          v-if="$store.state.resultList.length > 0"
+          class="mx-auto text-center"
+        >
+          <img :src="$store.state.meta.channelLogoUrl" alt="logo" />
           <h2 class="font-weight-bold mt-3">
             {{ $store.state.meta.channelName }}
           </h2>
         </div>
 
-        <div class="d-flex justify-center py-5">
+        <div
+          v-if="$store.state.resultList.length > 0"
+          class="d-flex justify-center py-5"
+        >
           <h3 class="font-weight-bold mr-10">
             Result : <span>{{ totalResult }}</span>
           </h3>

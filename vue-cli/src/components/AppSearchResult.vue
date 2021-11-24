@@ -14,19 +14,36 @@
       </ul>
 
       <div v-else>
-        <div class="d-flex justify-center py-5">
-          <h6 class="text-h6">keyword not found</h6>
+        <div class="d-flex flex-column justify-center py-5 mx-auto">
+          <img
+            class="mx-auto"
+            src="@/assets/img/not-found.svg"
+            alt="keyword"
+            srcset=""
+            width="250"
+            height="250"
+          />
+          <h6 class="text-h6 text-center mt-5 opacity-75">keyword not found</h6>
         </div>
       </div>
     </div>
-    <v-skeleton-loader
-      v-else-if="$store.state.loading"
-      v-for="index in 5"
-      :key="index"
-      light
-      type="list-item-three-line"
-      max-width="true"
-    ></v-skeleton-loader>
+    <div v-else-if="$store.state.loading">
+      <v-skeleton-loader
+        light
+        type="list-item-two-line"
+        max-width="500"
+        max-height="100"
+        class="mx-auto"
+      ></v-skeleton-loader>
+
+      <v-skeleton-loader
+        v-for="index in 4"
+        :key="index"
+        light
+        type="list-item-three-line"
+        max-width="true"
+      ></v-skeleton-loader>
+    </div>
   </div>
 </template>
 <script>
