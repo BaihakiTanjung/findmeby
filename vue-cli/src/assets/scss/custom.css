@@ -21,7 +21,7 @@ body {
 }
 
 .theme--dark.v-application button {
-  color: #3f3351 !important;
+  color: #fff !important;
 }
 
 .theme--dark.v-application h1 {
@@ -62,7 +62,7 @@ body {
 }
 
 .theme--light.v-application button {
-  color: #fff !important;
+  color: #3f3351 !important;
 }
 
 .theme--light.v-application h1 {
@@ -107,6 +107,12 @@ body {
 
 .page_head__card {
   padding: 80px 150px;
+}
+
+@media (max-width: 600px) {
+  .page_head__card {
+    padding: 80px 80px !important;
+  }
 }
 
 .search_form {

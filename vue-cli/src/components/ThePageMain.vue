@@ -35,7 +35,6 @@
         class="mx-auto"
         max-width="100px"
         max-height="100px"
-        v-bind="attrs"
         light
         type="image"
       ></v-skeleton-loader>
